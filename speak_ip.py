@@ -51,6 +51,19 @@ def play(voice):
         a.wait()
         if a.returncode == 0:
             break
+def sshin():
+    '''
+    Intro: juge if someone ssh in
+    Return:
+        True or False
+    '''
+    #if someone ssh in, the pid of sshd will more than 2
+    is_ssh_cmd = "pidof sshd | awk '{print NF}'"
+    sshpid = os.popen(is_ssh_cmd).read()
+    try:
+        return int(sshpid) > 1
+    except ValueError:
+        return False
 
 
 def speak(ip):
@@ -71,6 +84,8 @@ if __name__ == '__main__':
         else:
             count += 1
             speak(ip)
+        if sshin():
+            break
         if count == 10:
             break
         time.sleep(1)
